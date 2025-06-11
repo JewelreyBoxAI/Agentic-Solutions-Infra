@@ -30,7 +30,8 @@ AIsrc/Agentic-Solutions-Infra/
 ├── tenants/                  # Tenant-specific deployments
 │   ├── impact-realty/        # Impact Realty tenant
 │   ├── yummy-image-media/    # Yummy Image Media tenant
-│   ├── infra-rick/           # Infrastructure Rick tenant
+│   ├── infra-rick/           # Infrastructure maintenance tenant (powered by DualCoreAgent)
+│   ├── dualcore-agent/       # Core AI agent platform tenant
 │   └── hipaa-healthcare/     # HIPAA-compliant healthcare tenant
 ├── pipelines/                # CI/CD workflows
 │   └── deploy-infra.yml      # GitHub Actions deployment
@@ -103,7 +104,7 @@ Deploy shared infrastructure first:
 Deploy tenant-specific resources:
 
 1. Run the workflow again with:
-   - **Tenant**: `impact-realty`, `yummy-image-media`, `infra-rick`, or `hipaa-healthcare`
+   - **Tenant**: `impact-realty`, `yummy-image-media`, `infra-rick`, `dualcore-agent`, or `hipaa-healthcare`
    - **Action**: `plan` (review first), then `apply`
 
 ### Local Development

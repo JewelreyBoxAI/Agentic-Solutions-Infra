@@ -303,7 +303,8 @@ Global Infrastructure (globals/):
 Tenant Environments (tenants/):
   - impact-realty/: Production real estate tenant
   - yummy-image-media/: Production media tenant
-  - infra-rick/: Infrastructure Rick production tenant
+  - infra-rick/: Infrastructure maintenance tenant (powered by DualCoreAgent)
+  - dualcore-agent/: Core AI agent platform tenant
   - hipaa-healthcare/: HIPAA-compliant healthcare tenant
   - State: {tenant-name}.tfstate (isolated)
 ```
@@ -524,8 +525,328 @@ For questions about this architecture:
 - **HIPAA Compliance**: See [HIPAA-COMPLIANCE.md](./HIPAA-COMPLIANCE.md)
 - **Security Questions**: security@agentic.solutions
 
+## 🤖 **DualCoreAgent Integration Architecture**
+
+### **Core AI Agent Platform**
+The infrastructure now includes a dedicated **DualCoreAgent** tenant that provides dual-model AI capabilities using both OpenAI GPT and Anthropic Claude models for enhanced reliability and capability coverage.
+
+#### **DualCoreAgent Tenant Architecture**
+```yaml
+Components:
+  - Container Apps: Scalable agent deployment (3 instances default)
+  - Application Insights: Agent performance monitoring
+  - Key Vault: Secure API key storage (OpenAI + Anthropic)
+  - Cosmos DB: Agent state and conversation history
+  - Enhanced Security: HIPAA-level controls enabled
+  - Dapr Integration: Microservices communication
+
+Configuration:
+  - OpenAI Model: GPT-4 (configurable)
+  - Anthropic Model: Claude-3-Sonnet (configurable)
+  - Max Tokens: 4096
+  - Temperature: 0.7 (configurable)
+  - Request Timeout: 30 seconds
+  - DNS: dualcore.agentic.solutions.local
+```
+
+#### **Infra-Rick Maintenance Integration**
+The **infra-rick** tenant has been enhanced to leverage DualCoreAgent for automated infrastructure maintenance:
+```yaml
+Maintenance Capabilities:
+  - Automated Infrastructure Monitoring
+  - Intelligent Issue Detection and Resolution
+  - Proactive Resource Optimization
+  - Security Compliance Verification
+  - Performance Monitoring and Alerting
+
+Integration Architecture:
+  - Remote State Reference: Direct connection to DualCoreAgent
+  - Secure Communication: Key Vault-managed endpoints
+  - Dedicated Monitoring: Maintenance-specific Application Insights
+  - Dual-Model Redundancy: GPT-4 + Claude-3-Sonnet
+```
+
+## 🚀 **DualCoreAgent Implementation Roadmap**
+
+### **Phase 1: DuelCoreAgent Python Package Development**
+**Timeline: 2-3 weeks**
+
+#### **1.1 Package Structure Setup**
+```bash
+# Execute in sequence using provided prompt chains
+duelcore-agent/
+├── duelcore_agent/
+│   ├── __init__.py          # Package initialization
+│   ├── core.py              # DuelCoreAgent main class
+│   └── subagents.py         # Specialized sub-agents
+├── tests/
+│   └── test_core.py         # Unit tests with mocking
+├── pyproject.toml           # Package configuration
+└── README.md                # Documentation and usage
+```
+
+#### **1.2 Core Implementation Tasks**
+- [ ] **Implement DuelCoreAgent Class** (`core.py`)
+  - Dual API integration (OpenAI + Anthropic)
+  - Intelligent routing and fallback logic
+  - Error handling and retry mechanisms
+  - Configuration management
+  - Logging and telemetry
+
+- [ ] **Develop Specialized Sub-Agents** (`subagents.py`)
+  - `DriftDetectorAgent`: Infrastructure drift detection
+  - `PatchManagerAgent`: Automated patching and updates
+  - `SecurityAuditorAgent`: Security compliance monitoring
+  - `PerformanceOptimizerAgent`: Resource optimization
+  - `CostAnalyzerAgent`: Cost optimization recommendations
+
+- [ ] **Package Configuration** (`pyproject.toml`)
+  - Dependencies: `openai>=1.0.0`, `anthropic>=0.8.0`
+  - Build system: setuptools + wheel
+  - Entry points and CLI tools
+  - Version management
+
+#### **1.3 Testing and Validation**
+- [ ] **Unit Tests** (`tests/test_core.py`)
+  - Mock API responses for both providers
+  - Test routing and fallback logic
+  - Error handling validation
+  - Performance benchmarking
+
+- [ ] **Integration Tests**
+  - End-to-end agent workflows
+  - API rate limiting tests
+  - Configuration validation
+  - Security testing
+
+### **Phase 2: Infrastructure Integration**
+**Timeline: 1-2 weeks**
+
+#### **2.1 Container Image Development**
+- [ ] **Dockerfile Creation**
+  - Multi-stage build for optimization
+  - Security hardening
+  - Health check endpoints
+  - Environment variable configuration
+
+- [ ] **Azure Container Registry**
+  - Build and push duelcore-agent image
+  - Configure automated builds
+  - Security scanning integration
+  - Tag management strategy
+
+#### **2.2 Terraform Deployment**
+- [ ] **Deploy DualCoreAgent Tenant**
+  ```bash
+  # Using GitHub Actions workflow
+  gh workflow run deploy-infra.yml \
+    -f tenant=dualcore-agent \
+    -f action=plan
+  
+  gh workflow run deploy-infra.yml \
+    -f tenant=dualcore-agent \
+    -f action=apply
+  ```
+
+- [ ] **Configure API Keys**
+  - Store OpenAI API key in Key Vault
+  - Store Anthropic API key in Key Vault
+  - Configure access policies
+  - Test key retrieval
+
+#### **2.3 Infra-Rick Enhancement**
+- [ ] **Deploy Enhanced Infra-Rick**
+  ```bash
+  # Deploy infra-rick with DualCoreAgent integration
+  gh workflow run deploy-infra.yml \
+    -f tenant=infra-rick \
+    -f action=apply
+  ```
+
+- [ ] **Configure Maintenance Operations**
+  - Set up automated monitoring schedules
+  - Configure alert thresholds
+  - Test maintenance workflows
+  - Validate security controls
+
+### **Phase 3: Advanced Capabilities**
+**Timeline: 3-4 weeks**
+
+#### **3.1 Intelligent Maintenance Features**
+- [ ] **Automated Infrastructure Health Monitoring**
+  - Resource utilization analysis
+  - Performance bottleneck detection
+  - Cost optimization recommendations
+  - Security vulnerability scanning
+
+- [ ] **Predictive Maintenance**
+  - Trend analysis and forecasting
+  - Proactive issue resolution
+  - Capacity planning automation
+  - Maintenance scheduling optimization
+
+#### **3.2 Multi-Tenant Agent Deployment**
+- [ ] **Tenant-Specific Agent Instances**
+  - Deploy DualCoreAgent instances per tenant
+  - Tenant isolation and security
+  - Custom agent configurations
+  - Performance monitoring per tenant
+
+- [ ] **Agent Orchestration**
+  - Inter-agent communication via Dapr
+  - Workflow orchestration
+  - Task delegation and coordination
+  - Centralized agent management
+
+#### **3.3 Advanced Monitoring and Analytics**
+- [ ] **Agent Performance Dashboards**
+  - Real-time agent metrics
+  - Response time monitoring
+  - Cost tracking per agent
+  - Usage analytics and insights
+
+- [ ] **AI Model Performance Analysis**
+  - Model accuracy comparison
+  - Cost-effectiveness analysis
+  - Response quality metrics
+  - Automated model selection
+
+### **Phase 4: Production Optimization**
+**Timeline: 2-3 weeks**
+
+#### **4.1 Scalability Enhancements**
+- [ ] **Auto-Scaling Configuration**
+  - CPU/Memory-based scaling
+  - Queue-depth based scaling
+  - Predictive scaling algorithms
+  - Cost-optimized scaling policies
+
+- [ ] **Multi-Region Deployment**
+  - Disaster recovery setup
+  - Global load balancing
+  - Data replication strategies
+  - Regional compliance requirements
+
+#### **4.2 Security and Compliance**
+- [ ] **Enhanced Security Controls**
+  - Zero-trust network implementation
+  - API key rotation automation
+  - Audit logging enhancement
+  - Compliance reporting automation
+
+- [ ] **GDPR and Data Privacy**
+  - Data classification implementation
+  - Automated data retention policies
+  - Privacy-preserving agent operations
+  - Consent management integration
+
+### **Phase 5: Advanced AI Capabilities**
+**Timeline: 4-6 weeks**
+
+#### **5.1 Multi-Modal AI Integration**
+- [ ] **Vision Capabilities**
+  - Image analysis for infrastructure monitoring
+  - Visual anomaly detection
+  - Diagram and documentation analysis
+  - Screenshot-based troubleshooting
+
+- [ ] **Code Analysis and Generation**
+  - Terraform code optimization
+  - Automated infrastructure updates
+  - Security patch generation
+  - Documentation automation
+
+#### **5.2 Continuous Learning and Improvement**
+- [ ] **Feedback Loop Implementation**
+  - Agent performance learning
+  - User interaction optimization
+  - Automated fine-tuning
+  - Knowledge base enhancement
+
+- [ ] **Knowledge Management**
+  - Centralized knowledge repository
+  - Best practices automation
+  - Incident response playbooks
+  - Continuous documentation updates
+
+## 📋 **Immediate Next Steps (Week 1)**
+
+### **Priority 1: Repository Setup**
+1. **Create DuelCoreAgent Repository**
+   ```bash
+   # Initialize the duelcore-agent repository
+   mkdir duelcore-agent
+   cd duelcore-agent
+   git init
+   # Follow prompt chains 1-7 from provided specification
+   ```
+
+2. **Execute Prompt Chains**
+   - Run prompt chain 1: Initialize repo structure
+   - Run prompt chain 2: Implement core class
+   - Run prompt chain 3: Create subagents stubs
+   - Run prompt chain 4: Configure packaging
+   - Run prompt chain 5: Write README
+   - Run prompt chain 6: Add unit tests
+   - Run prompt chain 7: Setup CI/CD
+
+### **Priority 2: Infrastructure Preparation**
+1. **Configure API Keys**
+   ```bash
+   # Set up environment variables for API keys
+   export OPENAI_API_KEY="your-openai-key"
+   export ANTHROPIC_API_KEY="your-anthropic-key"
+   ```
+
+2. **Deploy DualCoreAgent Tenant**
+   ```bash
+   # Plan the deployment first
+   gh workflow run deploy-infra.yml \
+     -f tenant=dualcore-agent \
+     -f action=plan
+   ```
+
+### **Priority 3: Development Environment**
+1. **Set Up Development Environment**
+   ```bash
+   # Install development dependencies
+   pip install -e ".[dev]"
+   pytest tests/
+   ```
+
+2. **Container Development**
+   ```bash
+   # Build and test container image
+   docker build -t duelcore-agent:latest .
+   docker run --rm duelcore-agent:latest
+   ```
+
+## 📊 **Success Metrics and KPIs**
+
+### **Technical Metrics**
+- **Agent Response Time**: < 2 seconds average
+- **API Success Rate**: > 99.9%
+- **Container Startup Time**: < 30 seconds
+- **Memory Utilization**: < 512MB per agent instance
+- **Cost per Request**: < $0.01 average
+
+### **Operational Metrics**
+- **Infrastructure Issues Detected**: > 95% automated detection
+- **Mean Time to Resolution**: < 30 minutes
+- **Maintenance Task Automation**: > 80% fully automated
+- **Security Compliance**: 100% adherence to HIPAA controls
+- **Cost Optimization**: > 15% infrastructure cost reduction
+
+### **Business Metrics**
+- **Deployment Time Reduction**: > 50% faster deployments
+- **Operational Overhead**: > 60% reduction in manual tasks
+- **System Reliability**: > 99.9% uptime across all tenants
+- **Developer Productivity**: > 40% increase in delivery velocity
+- **Customer Satisfaction**: > 4.5/5 average rating
+
 ---
 
-**Document Version**: 1.0  
+**Document Version**: 2.0  
 **Last Updated**: January 2025  
-**Architecture Status**: ✅ Production Ready 
+**Architecture Status**: ✅ Production Ready + 🤖 AI-Enhanced  
+**Next Review**: Post DualCoreAgent Phase 1 Completion 

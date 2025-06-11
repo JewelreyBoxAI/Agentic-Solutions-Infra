@@ -12,6 +12,7 @@ on:
           - impact-realty
           - yummy-image-media
           - infra-rick
+          - dualcore-agent
           - hipaa-healthcare
           - globals
       action:

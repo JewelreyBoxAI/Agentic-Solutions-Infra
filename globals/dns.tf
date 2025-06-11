@@ -48,4 +48,18 @@ resource "azurerm_dns_a_record" "infra_rick" {
     Project     = "Agentic-Solutions"
     Tenant      = "infra-rick"
   }
+}
+
+resource "azurerm_dns_a_record" "dualcore_agent" {
+  name                = "dualcore"
+  zone_name           = azurerm_dns_zone.main.name
+  resource_group_name = azurerm_resource_group.main.name
+  ttl                 = 300
+  records             = ["10.0.1.103"]  # Placeholder IP
+
+  tags = {
+    Environment = "Production"
+    Project     = "Agentic-Solutions"
+    Tenant      = "dualcore-agent"
+  }
 } 
