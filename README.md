@@ -30,6 +30,7 @@ AIsrc/Agentic-Solutions-Infra/
 ├── tenants/                  # Tenant-specific deployments
 │   ├── impact-realty/        # Impact Realty tenant
 │   ├── yummy-image-media/    # Yummy Image Media tenant
+│   ├── infra-rick/           # Infrastructure Rick tenant
 │   └── hipaa-healthcare/     # HIPAA-compliant healthcare tenant
 ├── pipelines/                # CI/CD workflows
 │   └── deploy-infra.yml      # GitHub Actions deployment
@@ -102,7 +103,7 @@ Deploy shared infrastructure first:
 Deploy tenant-specific resources:
 
 1. Run the workflow again with:
-   - **Tenant**: `impact-realty` or `yummy-image-media`
+   - **Tenant**: `impact-realty`, `yummy-image-media`, `infra-rick`, or `hipaa-healthcare`
    - **Action**: `plan` (review first), then `apply`
 
 ### Local Development

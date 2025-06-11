@@ -11,6 +11,7 @@ on:
         options:
           - impact-realty
           - yummy-image-media
+          - infra-rick
           - hipaa-healthcare
           - globals
       action:
