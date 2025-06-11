@@ -1,0 +1,104 @@
+name: Deploy Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      tenant:
+        description: 'Tenant to deploy (impact-realty, yummy-image-media, or globals)'
+        required: true
+        default: 'impact-realty'
+        type: choice
+        options:
+          - impact-realty
+          - yummy-image-media
+          - hipaa-healthcare
+          - globals
+      action:
+        description: 'Terraform action to perform'
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
+  TF_VAR_acr_password: ${{ secrets.ACR_PASSWORD }}
+
+jobs:
+  terraform:
+    name: 'Terraform ${{ github.event.inputs.action }} - ${{ github.event.inputs.tenant }}'
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Protect apply operations behind main branch
+    if: |
+      github.event.inputs.action != 'apply' || 
+      github.ref == 'refs/heads/main'
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.0
+
+    - name: Set working directory
+      id: set-dir
+      run: |
+        if [ "${{ github.event.inputs.tenant }}" = "globals" ]; then
+          echo "WORKING_DIR=globals" >> $GITHUB_OUTPUT
+        else
+          echo "WORKING_DIR=tenants/${{ github.event.inputs.tenant }}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Terraform Init
+      working-directory: ${{ steps.set-dir.outputs.WORKING_DIR }}
+      run: terraform init
+
+    - name: Terraform Validate
+      working-directory: ${{ steps.set-dir.outputs.WORKING_DIR }}
+      run: terraform validate
+
+    - name: Terraform Format Check
+      working-directory: ${{ steps.set-dir.outputs.WORKING_DIR }}
+      run: terraform fmt -check
+
+    - name: Terraform Plan
+      working-directory: ${{ steps.set-dir.outputs.WORKING_DIR }}
+      run: terraform plan -no-color -input=false
+      if: github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply'
+
+    - name: Terraform Apply
+      working-directory: ${{ steps.set-dir.outputs.WORKING_DIR }}
+      run: terraform apply -auto-approve -input=false
+      if: |
+        github.event.inputs.action == 'apply' &&
+        github.ref == 'refs/heads/main'
+
+    - name: Terraform Destroy
+      working-directory: ${{ steps.set-dir.outputs.WORKING_DIR }}
+      run: terraform destroy -auto-approve -input=false
+      if: |
+        github.event.inputs.action == 'destroy' &&
+        github.ref == 'refs/heads/main'
+
+    - name: Upload Terraform Plan
+      uses: actions/upload-artifact@v3
+      if: github.event.inputs.action == 'plan'
+      with:
+        name: terraform-plan-${{ github.event.inputs.tenant }}
+        path: ${{ steps.set-dir.outputs.WORKING_DIR }}/terraform.tfplan
+        retention-days: 7 
