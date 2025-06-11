@@ -36,13 +36,18 @@ resource "azurerm_container_app" "main" {
       memory = var.memory
 
       env {
-        name  = "COSMOS_ENDPOINT"
-        value = var.cosmosdb_endpoint
+        name  = "POSTGRESQL_SERVER"
+        value = var.postgresql_server_name
       }
 
       env {
-        name        = "COSMOS_KEY"
-        secret_name = "cosmos-key"
+        name        = "POSTGRESQL_CONNECTION_STRING"
+        secret_name = "postgresql-connection-string"
+      }
+
+      env {
+        name  = "VECTOR_DATABASE_NAME"
+        value = var.vector_database_name
       }
 
       env {
@@ -53,8 +58,8 @@ resource "azurerm_container_app" "main" {
   }
 
   secret {
-    name  = "cosmos-key"
-    value = var.cosmosdb_key
+    name  = "postgresql-connection-string"
+    value = var.postgresql_connection_string
   }
 
   dynamic "dapr" {

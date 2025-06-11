@@ -57,20 +57,20 @@ variable "keyvault_url" {
   type        = string
 }
 
-variable "cosmosdb_name" {
-  description = "Name of the Cosmos DB account"
+variable "postgresql_server_name" {
+  description = "Name of the PostgreSQL server"
   type        = string
 }
 
-variable "cosmosdb_endpoint" {
-  description = "Cosmos DB endpoint URL"
-  type        = string
-}
-
-variable "cosmosdb_key" {
-  description = "Cosmos DB primary key"
+variable "postgresql_connection_string" {
+  description = "PostgreSQL connection string"
   type        = string
   sensitive   = true
+}
+
+variable "vector_database_name" {
+  description = "Name of the vector database for FAISS operations"
+  type        = string
 }
 
 variable "log_analytics_workspace_id" {

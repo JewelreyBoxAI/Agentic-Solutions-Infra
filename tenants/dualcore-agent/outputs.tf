@@ -28,16 +28,25 @@ output "keyvault_uri" {
   value       = module.keyvault.keyvault_vault_uri
 }
 
-output "cosmos_endpoint" {
-  description = "Endpoint of the Cosmos DB account for agent state"
-  value       = module.cosmosdb.cosmos_endpoint
+output "postgresql_fqdn" {
+  description = "FQDN of the PostgreSQL server for agent state"
+  value       = module.postgresql_faiss.postgresql_fqdn
+}
+
+output "postgresql_connection_string" {
+  description = "Connection string for PostgreSQL server"
+  value       = module.postgresql_faiss.postgresql_connection_string
   sensitive   = true
 }
 
-output "cosmos_primary_key" {
-  description = "Primary key of the Cosmos DB account"
-  value       = module.cosmosdb.cosmos_primary_key
-  sensitive   = true
+output "vector_database_name" {
+  description = "Name of the vector database for FAISS operations"
+  value       = module.postgresql_faiss.vector_database_name
+}
+
+output "main_database_name" {
+  description = "Name of the main agent database"
+  value       = module.postgresql_faiss.main_database_name
 }
 
 output "log_analytics_workspace_id" {

@@ -4,7 +4,8 @@ env_name     = "dualcore-agent-env"
 app_name     = "dualcore-agent-app"
 acr_name     = "dualcoreagentcr"
 kv_name      = "dualcore-agent-kv"
-cosmos_name  = "dualcore-agent-cosmos"
+postgresql_server_name = "dualcore-agent-pg"
+database_name          = "dualcore_agents"
 law_name     = "dualcore-agent-law"
 agent_count  = 3
 dapr_enabled = true
@@ -22,6 +23,10 @@ request_timeout = 30
 # Note: API keys should be provided via environment variables or Azure Key Vault
 # openai_api_key = "your-openai-api-key"
 # anthropic_api_key = "your-anthropic-api-key"
+
+# Note: PostgreSQL credentials should be provided via environment variables or Azure Key Vault
+# postgresql_admin_username = "pgadmin"
+# postgresql_admin_password = "your-secure-password"
 
 # Note: ACR credentials should be provided via environment variables or Azure Key Vault
 # acr_username = "your-acr-username"

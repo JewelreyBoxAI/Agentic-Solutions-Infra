@@ -66,14 +66,19 @@ module "keyvault" {
   tags = var.tags
 }
 
-# Cosmos DB with private connectivity
-module "cosmosdb" {
-  source = "../../modules/cosmosdb"
+# PostgreSQL with pgvector for infrastructure monitoring data and FAISS operations
+module "postgresql_faiss" {
+  source = "../../modules/postgresql-faiss"
 
-  cosmos_name           = var.cosmos_name
-  resource_group_name   = data.azurerm_resource_group.main.name
-  location             = data.azurerm_resource_group.main.location
-  allowed_subnet_id    = data.azurerm_subnet.database.id
+  postgresql_server_name       = var.postgresql_server_name
+  resource_group_name          = data.azurerm_resource_group.main.name
+  location                    = data.azurerm_resource_group.main.location
+  admin_username              = var.postgresql_admin_username
+  admin_password              = var.postgresql_admin_password
+  database_name               = var.database_name
+  allowed_subnet_id           = data.azurerm_subnet.database.id
+  virtual_network_id          = data.azurerm_virtual_network.main.id
+  log_analytics_workspace_id  = module.log_analytics.workspace_id
 
   tags = var.tags
 }
@@ -91,9 +96,9 @@ module "container_app" {
   acr_password                = var.acr_password
   keyvault_name               = module.keyvault.keyvault_name
   keyvault_url                = module.keyvault.keyvault_vault_uri
-  cosmosdb_name               = module.cosmosdb.cosmos_name
-  cosmosdb_endpoint           = module.cosmosdb.cosmos_endpoint
-  cosmosdb_key                = module.cosmosdb.cosmos_primary_key
+  postgresql_server_name      = module.postgresql_faiss.postgresql_server_name
+  postgresql_connection_string = module.postgresql_faiss.postgresql_connection_string
+  vector_database_name        = module.postgresql_faiss.vector_database_name
   log_analytics_workspace_id  = module.log_analytics.workspace_id
   agent_count                 = var.agent_count
   dapr_enabled                = var.dapr_enabled

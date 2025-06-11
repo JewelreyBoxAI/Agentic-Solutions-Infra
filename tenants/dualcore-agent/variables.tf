@@ -40,10 +40,29 @@ variable "kv_name" {
   default     = "dualcore-agent-kv"
 }
 
-variable "cosmos_name" {
-  description = "Name of the Cosmos DB account"
+variable "postgresql_server_name" {
+  description = "Name of the PostgreSQL server"
   type        = string
-  default     = "dualcore-agent-cosmos"
+  default     = "dualcore-agent-pg"
+}
+
+variable "postgresql_admin_username" {
+  description = "Administrator username for PostgreSQL"
+  type        = string
+  default     = "pgadmin"
+  sensitive   = true
+}
+
+variable "postgresql_admin_password" {
+  description = "Administrator password for PostgreSQL"
+  type        = string
+  sensitive   = true
+}
+
+variable "database_name" {
+  description = "Name of the main database"
+  type        = string
+  default     = "dualcore_agents"
 }
 
 variable "law_name" {
